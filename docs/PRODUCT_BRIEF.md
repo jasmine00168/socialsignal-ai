@@ -1,51 +1,169 @@
-# SocialSignal AI — V0.1 Product Brief
+# SocialSignal AI — V0.2 产品方案
 
-## User problem
+## 1. 用户问题
 
-Small product and operations teams manually scan scattered social posts for customer pain points. The work is slow, inconsistent, and difficult to audit because conclusions are often separated from the original source.
+小型产品和运营团队需要从分散的社交内容中寻找客户痛点，但人工整理速度慢、判断标准不一致，而且最终结论经常与原文证据分离。
 
-## Target user
+本产品不试图用社交热度直接证明市场规模，而是先完成一个更可靠的任务：
 
-- Primary: product managers and growth operators in small teams.
-- Secondary: founders, researchers, and content operators validating a market.
+**发现值得进一步调研的软件需求，并让每个结论都可以追溯到原文。**
 
-## Job to be done
+## 2. 目标用户
 
-When reviewing social conversations, help me quickly find software-related needs and verify every conclusion against the original wording, so I can decide which opportunity deserves deeper research.
+主要用户：
 
-## V0.1 scope
+- 小型团队的产品经理；
+- 增长和用户运营人员；
+- 正在验证产品方向的创业者。
 
-Input:
+次要用户：
 
-- Built-in anonymized demo posts.
-- User-uploaded CSV with `post_id`, `platform`, `content`, and `source_url`.
+- 市场研究人员；
+- 内容运营人员；
+- 需要整理大量用户反馈的团队。
 
-AI output:
+## 3. JTBD
 
-- Demand classification.
-- Target user and usage context.
-- Pain point and desired solution.
-- Urgency, confidence, and willingness-to-pay signal.
-- A verbatim evidence quote that is checked against the source text.
+当我查看大量社交讨论时，帮助我快速找到可以由软件解决的需求、合并相似问题并核对原文，以便决定下一步应该访谈和验证哪些产品机会。
 
-Not in V0.1:
+## 4. V0.2 产品范围
 
-- Automated scraping.
-- Account login or multi-account management.
-- Automatic publishing.
-- Market-size claims based only on social engagement.
+### 输入
 
-## Success criteria
+- 内置虚构演示帖子；
+- 用户上传的 CSV；
+- 帖子编号、来源平台、正文和来源链接；
+- 可选的点赞量、评论量和发布时间。
 
-- A first-time user can analyze one post in under two minutes.
-- 100% of displayed AI conclusions retain the source post id and URL.
-- Evidence quotes are automatically flagged when they are not verbatim.
-- The same input always produces a schema-valid result or a clear error.
+### 核心处理流程
 
-## Product risks
+1. 校验输入字段并去除重复帖子；
+2. 调用 LLM 输出严格结构化的需求判断；
+3. 提取目标用户、场景、痛点和期望方案；
+4. 用程序检查证据引用是否逐字存在；
+5. 对已识别需求进行 AI 语义聚类；
+6. 聚类失败时按照需求类型进行规则降级；
+7. 使用透明产品规则计算机会分；
+8. 展示机会排名、评分拆解和原文证据。
 
-- A social post is not proof of a large market.
-- LLM extraction can misclassify jokes, ads, or vague complaints.
-- Platform data collection and publishing require separate permission and compliance work.
-- Engagement counts can be manipulated and must not become the sole opportunity score.
+### 不在当前范围
 
+- 未经授权的平台自动抓取；
+- 自动登录或管理社交媒体账号；
+- 未经人工审核的内容自动发布；
+- 根据少量帖子直接预测市场规模；
+- 尚未经过正式评测的准确率承诺。
+
+## 5. AI 输出数据契约
+
+每条帖子输出：
+
+- 是否存在软件需求；
+- 需求类型；
+- 机会标题；
+- 目标用户；
+- 使用场景；
+- 核心痛点；
+- 期望解决方案；
+- 当前替代方式；
+- 付费意愿信号；
+- 紧迫度；
+- AI 置信度；
+- 逐字原文证据；
+- AI 判断摘要；
+- 帖子编号；
+- 模型名称；
+- 证据校验结果。
+
+Structured Outputs 负责限制字段和数据类型，程序校验负责验证引用是否确实来自原帖。
+
+当模型输出不符合数据契约时，产品显示明确错误，不静默生成结论。
+
+## 6. 机会评分
+
+机会分满分 100，用于同一批数据内部的研究优先级排序。
+
+| 维度 | 权重 | 产品逻辑 |
+| --- | ---: | --- |
+| 本批需求占比 | 25 | 聚类内需求数除以全部需求数 |
+| 平均紧迫度 | 20 | 原帖表达的问题紧迫程度 |
+| 付费意愿 | 20 | 原帖中明确表达的付费信号 |
+| AI 置信度 | 15 | 辅助人工复核，不等于真实准确率 |
+| 证据完整度 | 10 | 引用是否逐字存在于原帖 |
+| 互动量 | 10 | 对数归一化，只作为辅助信号 |
+
+机会分由确定性的产品规则计算，不由模型直接生成。
+
+互动量不能单独作为需求证据，也不能用于直接推断市场规模。
+
+## 7. V0.2 验收结果
+
+一次真实 OpenAI API 运行结果：
+
+- 输入 6 条演示帖子；
+- 识别出 5 条软件需求；
+- 形成 4 个 AI 语义聚类；
+- 本次证据校验通过率为 100%；
+- 9 项离线自动化测试全部通过。
+
+本次结果证明端到端产品链路能够运行，不代表模型在真实总体数据上的准确率。
+
+## 8. 当前成功指标
+
+- 所有展示的 AI 结论保留帖子编号和来源链接；
+- 引用不是原文时必须标记为待复核；
+- AI 输出必须通过数据契约校验；
+- 用户运行批量分析前可以看到预计请求数量；
+- 单条 API 请求失败时保留其他已完成结果；
+- 聚类失败时提供可解释的规则降级路径。
+
+## 9. 下一阶段评测指标
+
+建立人工标注数据集后，需要持续衡量：
+
+- 需求识别 Precision；
+- 需求识别 Recall；
+- F1 Score；
+- 原文证据通过率；
+- 聚类人工一致率；
+- 单条分析成本；
+- P50 和 P95 延迟；
+- API 失败率；
+- 人工复核率。
+
+## 10. 产品风险与控制
+
+| 风险 | 控制策略 |
+| --- | --- |
+| 把广告、玩笑或泛抱怨识别成需求 | 建立负样本评测集并展示置信度 |
+| AI 编造原文证据 | 要求逐字引用并由程序校验 |
+| 过度合并不同需求 | 允许单条成组，并展示组内全部证据 |
+| 热门内容造成判断偏差 | 降低互动量权重，明确其不是需求证据 |
+| API 请求失败 | 保留已完成结果并显示清晰错误 |
+| 聚类结果缺失或重复 | 验证帖子编号完整性并切换规则分组 |
+| 平台数据合规风险 | 仅接入经过授权或用户上传的数据 |
+| 自动发布导致误发 | 自动发布不进入当前产品范围 |
+
+## 11. 关键产品迭代
+
+在 V0.2 真实验收中发现：当所有聚类都只有一条需求时，每组都获得满分频次分，导致机会分虚高。
+
+因此将“相对最大聚类”改为“该聚类占本批全部需求的比例”。
+
+这次迭代体现了：
+
+- 用真实运行结果检查评分逻辑；
+- 区分 AI 输出和确定性产品规则；
+- 避免看似精确但无法解释的分数；
+- 根据验证结果调整产品，而不是只完成代码。
+
+## 12. 下一步
+
+V0.3 优先完成：
+
+1. 机会报告导出；
+2. 分析失败记录；
+3. 机会筛选看板；
+4. 小型人工标注集；
+5. 模型质量、成本和延迟评测；
+6. 可供招聘方体验的公开部署。
