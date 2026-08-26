@@ -66,7 +66,10 @@ with st.sidebar:
     st.header("分析设置")
     model = st.text_input("模型", value=os.getenv("OPENAI_MODEL", "gpt-5.4-mini"))
     api_key = get_api_key()
-    st.success("OpenAI API 已连接") if api_key else st.warning("尚未配置 OpenAI API")
+    if api_key:
+        st.success("OpenAI API 已连接")
+    else:
+        st.warning("尚未配置 OpenAI API")
     st.divider()
     st.markdown("**当前里程碑**")
     st.write("V0.1 · 单条需求识别与证据校验")
@@ -127,4 +130,3 @@ if analysis := st.session_state.get("latest_analysis"):
 
 with st.expander("CSV 字段说明"):
     st.code(", ".join(REQUIRED_COLUMNS))
-
