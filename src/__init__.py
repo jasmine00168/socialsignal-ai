@@ -1,0 +1,2 @@
+"""SocialSignal AI application package."""
+

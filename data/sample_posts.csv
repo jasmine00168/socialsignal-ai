@@ -1,0 +1,8 @@
+post_id,platform,content,source_url,likes,comments,published_at
+demo-001,小红书,"每天要把十几个客户群里的需求手工复制到表格，经常漏掉重点。有没有能自动归类并提醒我的工具？",https://example.com/posts/demo-001,328,46,2026-08-18
+demo-002,小红书,"做自媒体最痛苦的是同一条内容要改成小红书、公众号和朋友圈三个版本，希望有工具能保留语气自动改写。",https://example.com/posts/demo-002,512,71,2026-08-19
+demo-003,小红书,"今天去公园散步，天气很好，随手拍了几张照片。",https://example.com/posts/demo-003,87,5,2026-08-20
+demo-004,知乎,"团队每周收集用户反馈，但大家记录格式不同，开复盘会前还要花半天合并和去重。",https://example.com/posts/demo-004,203,31,2026-08-21
+demo-005,微博,"找工作投了很多岗位，总记不清哪家公司进行到第几轮了，特别需要一个简单的进度提醒。",https://example.com/posts/demo-005,144,29,2026-08-22
+demo-006,小红书,"小店只有两个人，回复咨询、整理订单、写推广文案全靠手工，希望一个便宜的软件集中处理。",https://example.com/posts/demo-006,621,98,2026-08-23
+
