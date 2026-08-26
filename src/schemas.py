@@ -41,3 +41,20 @@ class DemandAnalysisResult(DemandAnalysis):
     evidence_verified: bool
     model: str
 
+
+class ClusterAssignment(BaseModel):
+    """One demand-to-cluster assignment produced by the model."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    post_id: str
+    cluster_id: str = Field(description="Stable short identifier such as cluster-01.")
+    cluster_label: str = Field(description="Concise Chinese label describing the shared need.")
+
+
+class DemandClusters(BaseModel):
+    """Structured contract for a complete set of cluster assignments."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    assignments: list[ClusterAssignment]
